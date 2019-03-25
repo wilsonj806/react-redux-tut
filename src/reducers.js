@@ -1,5 +1,7 @@
 import { VisibilityFilters, ADD_TODO, TOGGLE_TODO, SET_VISIBILITY_FILTER } from "./actions";
 
+import { combineReducers } from 'redux';
+
 /* NOTE You should be trying to determine the shape that you want your State to look like before coding
   (i.e what's the minimal representation of your app State as an object)
   - general rule of thumb is to keep UI State separate from any stored data
@@ -32,7 +34,7 @@ class SampleState {
 const sampleReducer = (prevState, action) => new SampleState();
 
 /*
-  Note this looks like the type of callback Array.prototype.reduce() accepts
+  NOTE the above looks like the type of callback Array.prototype.reduce() accepts
     and coincidentally the type of callback this.setState() from React can accept
 
   Also note that we prefer keeping the Reducer pure, at least for now.
@@ -42,14 +44,59 @@ const sampleReducer = (prevState, action) => new SampleState();
 
 // Before we start doing a whole bunch of different things with reducers, we need to define an initial state
 
+const { SHOW_ALL } = VisibilityFilters;
+
 const initialState = {
   visibilityFilter: VisibilityFilters.SHOW_ALL,
   todos: []
-}
+};
 
 // reducer function below:
 
-const todoApp = (state = initialState, action) => {
+/*
+NOTE since we're using switch() it's going to get pretty unwieldly to have a bunch of callbacks
+  to the point where our reducer is like 100's of lines of code
+
+  We can mitigate this with reducer composition, where we split the responsibility of handling state
+  up between multiple smaller functions, and make one function determine which function to run
+  based on the type of action taken
+ */
+
+const todos = (state = [], action) => {
+  switch (action.type) {
+    case ADD_TODO:
+      return [
+        ...state,
+        {
+          text: action.text,
+          completed: false
+        }
+      ]
+    case TOGGLE_TODO:
+      return state.map((todo, index) => {
+        if (index === action.index) {
+          return Object.assign({}, todo, {
+            completed: !todo.completed
+          })
+        }
+        return todo
+      })
+    default:
+      return state
+  }
+}
+
+const visibilityFilter = (state = SHOW_ALL, action) => {
+  switch (action.type) {
+    case SET_VISIBILITY_FILTER:
+      return action.filter
+    default:
+      return state
+  }
+}
+
+// NOTE below is the first version of the todoApp reducer with PARTIAL composition
+const todoAppInit = (state = initialState, action) => {
   // ES6 gives you function default params but if we didn't have that, we'd use the below
   // if (typeof state == null) return initialState
 
@@ -60,27 +107,15 @@ const todoApp = (state = initialState, action) => {
       return Object.assign({}, state, {
         visibilityFilter: action.filter
       })
+
     case ADD_TODO:
       return Object.assign({}, state, {
-        todos: [
-          ...state.todos,
-          {
-            text: action.text,
-            completed: false
-          }
-        ]
+        todos: todos(state.todos, action)
       })
     // for TOGGLE_TODO the values are a map of the current state, but if it's the current index, we invert the current compledted value
     case TOGGLE_TODO:
       return Object.assign({}, state, {
-        todos: state.todos.map((todo, index) => {
-          if (index === action.index) {
-            return Object.assign({}, todo, {
-              completed: !todo.completed
-            })
-          }
-          return todo
-        })
+        todos: todos(state.todos, action)
       })
     default:
       return state;
@@ -92,3 +127,31 @@ const todoApp = (state = initialState, action) => {
       of dispatching updates, creating a store, and using objects as the store
     */
 }
+
+// If we're composing various parts of our state together, then the final reducer looks like the below:
+
+const todoApp = (state = initialState, action) => {
+  /* NOTE it's worth pointing out that with our set up, two functions are handling their own
+    small piece of the app's state rather than the big block above
+  Since they're all pure functions, it's super easy to test as the output is straight forwards */
+  return {
+    visibilityFilter: visibilityFilter(state.visibilityFilter, action),
+    todos: todos(state.todos, action)
+  }
+}
+
+// Redux gives a utility that more or less does the above and an example can be seen below
+
+const reducer = combineReducers({
+  visibilityFilter,
+  todos
+})
+
+// in addition, you can assign a different key to each part of your app's state like so:
+const sampleReducer = combineReducers({
+  a: doAThing,
+  b: b,
+  c: doAThingForC
+})
+
+export { todoApp }

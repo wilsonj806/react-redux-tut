@@ -14,7 +14,9 @@ export {
 
 // note that the key 'type' is required in an Action object and everything else is up to the programmer
 // for a Todo task we'll want to track the task name, keep count of these as its going into an array, and we want to track completion progress
+
 // this will give the below
+// eslint-disable-next-line
 const actionAddTodo = {
   type: ADD_TODO,
   index: 5,
@@ -49,6 +51,7 @@ e.g:
   // We can then use Bound Action Creators to automatically dispatch said actions
   // NOTE we'll probably actually be accessing dispatch() via helper functions such as react-redux's connect()
 const store = {desc: 'a mock store'};
+// eslint-disable-next-line
 const boundAddTodo = text => store.dispatch(addTodo(text));
 
 // In addition Action Creators might be asynchronous and have side-effects. The Redux docs has a section on that

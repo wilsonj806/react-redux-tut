@@ -8,6 +8,7 @@ import { combineReducers } from 'redux';
   - also prefer normalized keys over nesting state vars in other state vars
     - it's cleaner/ easier to maintain
  */
+// eslint-disable-next-line
 const exampleState = {
   visibilityFilter: 'SHOW_ALL',
   todos: [
@@ -31,6 +32,7 @@ This is what reducers are for, and as it turns out resembles a number of things
 class SampleState {
   desc = 'mock State'
 }
+// eslint-disable-next-line
 const sampleReducer = (prevState, action) => new SampleState();
 
 /*
@@ -96,6 +98,7 @@ const visibilityFilter = (state = SHOW_ALL, action) => {
 }
 
 // NOTE below is the first version of the todoApp reducer with PARTIAL composition
+// eslint-disable-next-line
 const todoAppInit = (state = initialState, action) => {
   // ES6 gives you function default params but if we didn't have that, we'd use the below
   // if (typeof state == null) return initialState
@@ -130,7 +133,8 @@ const todoAppInit = (state = initialState, action) => {
 
 // If we're composing various parts of our state together, then the final reducer looks like the below:
 
-const todoApp = (state = initialState, action) => {
+// eslint-disable-next-line
+const todoAppManual = (state = initialState, action) => {
   /* NOTE it's worth pointing out that with our set up, two functions are handling their own
     small piece of the app's state rather than the big block above
   Since they're all pure functions, it's super easy to test as the output is straight forwards */
@@ -142,16 +146,15 @@ const todoApp = (state = initialState, action) => {
 
 // Redux gives a utility that more or less does the above and an example can be seen below
 
-const reducer = combineReducers({
+export const todoApp = combineReducers({
   visibilityFilter,
   todos
 })
 
 // in addition, you can assign a different key to each part of your app's state like so:
-const sampleReducer = combineReducers({
+/* const sampleReducer = combineReducers({
   a: doAThing,
   b: b,
   c: doAThingForC
-})
+}) */
 
-export { todoApp }

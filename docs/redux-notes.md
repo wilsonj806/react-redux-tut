@@ -1,5 +1,9 @@
 # Redux Notes
 
+## Additional Documentation
+
+- [Data Flow](./data-flow.md)
+
 ## What is Redux
 
 Redux is a predictable state container for JavaScript apps. It provides and facilitates for centralized state handling that'll help apps run consistently no matter the environment.

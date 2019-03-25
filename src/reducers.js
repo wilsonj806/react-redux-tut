@@ -65,6 +65,7 @@ NOTE since we're using switch() it's going to get pretty unwieldly to have a bun
  */
 
 const todos = (state = [], action) => {
+  // console.log('determining action type for todos');
   switch (action.type) {
     case ADD_TODO:
       return [
@@ -84,15 +85,18 @@ const todos = (state = [], action) => {
         return todo
       })
     default:
+      // console.log('i have been called as todo');
       return state
   }
 }
 
 const visibilityFilter = (state = SHOW_ALL, action) => {
+  // console.log('determining action type for visibility filter');
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
       return action.filter
     default:
+      // console.log('i have been called as visibility filter');
       return state
   }
 }

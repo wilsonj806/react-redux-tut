@@ -9,6 +9,8 @@ import { todoApp } from './reducers'
 
 const store = createStore(todoApp);
 
+console.log('begining test run');
+
 // Log the initial state
 console.log(store.getState())
 

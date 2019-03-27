@@ -7,15 +7,19 @@ const Link = ({ active, children, onClick }) => {
   }
 
   return (
-    <a
-      href=""
+    <button
+      style={{
+        color: 'blue',
+        background: 'transparent',
+        border: '1px solid grey',
+      }}
       onClick={e => {
         e.preventDefault()
         onClick()
       }}
     >
       {children}
-    </a>
+    </button>
   )
 }
 

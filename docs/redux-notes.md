@@ -3,7 +3,7 @@
 ## Additional Documentation
 
 - [Data Flow](./data-flow.md)
-- [React Redux](./react-redux.md)
+- [React Redux Basics](./react-redux-basics.md)
 
 ## What is Redux
 

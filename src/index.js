@@ -1,11 +1,9 @@
+import React from 'react';
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
 import { createStore } from 'redux'
-import {
-  addTodo,
-  toggleTodo,
-  setVisibilityFilter,
-  VisibilityFilters
-} from './actions'
 import { todoApp } from './reducers'
+import App from './App'
 
 /* so we have an actions.js file and a reducers file
 both of them handle actions that trigger certain updates in the state, but now we need to
@@ -22,3 +20,15 @@ const store = createStore(todoApp);
   // the test for it can be found in ./storeTest.js
 
 // So that's pretty much it for the store for now
+
+/*
+  React-Redux also exposes a <Provider/> component that way you can pass the store to every dependent
+    component
+  It seems fairly similar to the React Context API, only here you don't have to specify a Consumer component
+  */
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+)

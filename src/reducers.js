@@ -64,40 +64,40 @@ NOTE since we're using switch() it's going to get pretty unwieldly to have a bun
   based on the type of action taken
  */
 
-const todos = (state = [], action) => {
+const todos = (todosState = [], action) => {
   // console.log('determining action type for todos');
   switch (action.type) {
     case ADD_TODO:
       return [
-        ...state,
+        ...todosState,
         {
           text: action.text,
           completed: false
         }
       ]
     case TOGGLE_TODO:
-      return state.map((todo, index) => {
+      return todosState.map((todo, index) => {
         if (index === action.index) {
           return Object.assign({}, todo, {
             completed: !todo.completed
           })
         }
-        return todo
+        return todosState
       })
     default:
       // console.log('i have been called as todo');
-      return state
+      return todosState
   }
 }
 
-const visibilityFilter = (state = SHOW_ALL, action) => {
+const visibilityFilter = (visFilterState = SHOW_ALL, action) => {
   // console.log('determining action type for visibility filter');
   switch (action.type) {
     case SET_VISIBILITY_FILTER:
       return action.filter
     default:
       // console.log('i have been called as visibility filter');
-      return state
+      return visFilterState
   }
 }
 
